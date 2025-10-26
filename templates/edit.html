@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+
+{% block title %}Edit {{ movie.title }}{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card shadow-sm border-0">
+                <div class="card-header bg-white">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h2 class="h4 mb-0 fw-bold">Edit Rating</h2>
+                        <a href="{% url 'home' %}" class="btn btn-sm btn-outline-secondary">
+                            <i class="fas fa-arrow-left me-1"></i>Back
+                        </a>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-4 mb-4 mb-md-0">
+                            <img src="{{ movie.img_url }}" alt="{{ movie.title }}" class="img-fluid rounded shadow">
+                        </div>
+                        <div class="col-md-8">
+                            <h3 class="fw-bold">{{ movie.title }} <small class="text-muted">({{ movie.year }})</small></h3>
+                            <p class="text-muted mb-4">{{ movie.description }}</p>
+
+                            <form method="post">
+                                {% csrf_token %}
+                                <div class="mb-3">
+                                    {{ form.rating.label_tag }}
+                                    {{ form.rating }}
+                                    {% if form.rating.errors %}
+                                        <div class="text-danger">{{ form.rating.errors }}</div>
+                                    {% endif %}
+                                </div>
+                                <div class="mb-3">
+                                    {{ form.review.label_tag }}
+                                    {{ form.review }}
+                                    {% if form.review.errors %}
+                                        <div class="text-danger">{{ form.review.errors }}</div>
+                                    {% endif %}
+                                </div>
+                                <button type="submit" class="btn btn-primary">Update Rating</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
