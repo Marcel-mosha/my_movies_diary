@@ -3,44 +3,80 @@
 {% block title %}Edit {{ movie.title }}{% endblock %}
 
 {% block content %}
-<div class="container">
+<div class="container my-5">
     <div class="row justify-content-center">
-        <div class="col-lg-8">
-            <div class="card shadow-sm border-0">
-                <div class="card-header bg-white">
+        <div class="col-lg-10">
+            <div class="card shadow-lg border-0 rounded-4 overflow-hidden">
+                <div class="card-header bg-primary text-white py-4">
                     <div class="d-flex justify-content-between align-items-center">
-                        <h2 class="h4 mb-0 fw-bold">Edit Rating</h2>
-                        <a href="{% url 'home' %}" class="btn btn-sm btn-outline-secondary">
-                            <i class="fas fa-arrow-left me-1"></i>Back
+                        <h2 class="h4 mb-0 fw-bold">
+                            <i class="fas fa-edit me-2"></i>Edit Movie Rating
+                        </h2>
+                        <a href="{% url 'home' %}" class="btn btn-sm btn-light text-primary">
+                            <i class="fas fa-arrow-left me-1"></i>Back to List
                         </a>
                     </div>
                 </div>
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-md-4 mb-4 mb-md-0">
-                            <img src="{{ movie.img_url }}" alt="{{ movie.title }}" class="img-fluid rounded shadow">
+                <div class="card-body p-4 p-lg-5">
+                    <div class="row g-4">
+                        <div class="col-md-5 col-lg-4">
+                            <div class="movie-poster-wrapper position-relative">
+                                <img src="{{ movie.img_url }}" 
+                                     alt="{{ movie.title }}" 
+                                     class="img-fluid rounded-3 shadow-lg w-100"
+                                     style="object-fit: cover; max-height: 500px;"
+                                     onerror="this.src='https://via.placeholder.com/300x450/6c757d/ffffff?text=No+Poster'">
+                                <div class="position-absolute top-0 end-0 m-3">
+                                    {% if movie.ranking %}
+                                    <span class="badge bg-primary rounded-pill px-3 py-2 shadow">
+                                        <i class="fas fa-trophy me-1"></i>#{{ movie.ranking }}
+                                    </span>
+                                    {% endif %}
+                                </div>
+                            </div>
                         </div>
-                        <div class="col-md-8">
-                            <h3 class="fw-bold">{{ movie.title }} <small class="text-muted">({{ movie.year }})</small></h3>
-                            <p class="text-muted mb-4">{{ movie.description }}</p>
+                        <div class="col-md-7 col-lg-8">
+                            <div class="mb-4">
+                                <h3 class="fw-bold mb-2">{{ movie.title }} 
+                                    <small class="text-muted fs-5">({{ movie.year }})</small>
+                                </h3>
+                                <p class="text-muted mb-3 lh-base">{{ movie.description }}</p>
+                            </div>
 
-                            <form method="post">
+                            <form method="post" class="mt-4">
                                 {% csrf_token %}
-                                <div class="mb-3">
-                                    {{ form.rating.label_tag }}
+                                <div class="mb-4">
+                                    <label class="form-label fw-semibold">
+                                        <i class="fas fa-star text-warning me-2"></i>{{ form.rating.label }}
+                                    </label>
                                     {{ form.rating }}
                                     {% if form.rating.errors %}
-                                        <div class="text-danger">{{ form.rating.errors }}</div>
+                                        <div class="text-danger mt-2">{{ form.rating.errors }}</div>
                                     {% endif %}
+                                    <small class="form-text text-muted d-block mt-2">
+                                        Rate from 0.0 to 10.0 (e.g., 8.5)
+                                    </small>
                                 </div>
-                                <div class="mb-3">
-                                    {{ form.review.label_tag }}
+                                <div class="mb-4">
+                                    <label class="form-label fw-semibold">
+                                        <i class="fas fa-comment-dots text-primary me-2"></i>{{ form.review.label }}
+                                    </label>
                                     {{ form.review }}
                                     {% if form.review.errors %}
-                                        <div class="text-danger">{{ form.review.errors }}</div>
+                                        <div class="text-danger mt-2">{{ form.review.errors }}</div>
                                     {% endif %}
+                                    <small class="form-text text-muted d-block mt-2">
+                                        Share your thoughts about this movie
+                                    </small>
                                 </div>
-                                <button type="submit" class="btn btn-primary">Update Rating</button>
+                                <div class="d-grid gap-2 d-md-flex justify-content-md-start">
+                                    <button type="submit" class="btn btn-primary btn-lg px-5 rounded-pill">
+                                        <i class="fas fa-save me-2"></i>Update Rating
+                                    </button>
+                                    <a href="{% url 'home' %}" class="btn btn-outline-secondary btn-lg px-5 rounded-pill">
+                                        <i class="fas fa-times me-2"></i>Cancel
+                                    </a>
+                                </div>
                             </form>
                         </div>
                     </div>
@@ -49,4 +85,30 @@
         </div>
     </div>
 </div>
+
+<style>
+.movie-poster-wrapper img {
+    transition: transform 0.3s ease;
+}
+
+.movie-poster-wrapper:hover img {
+    transform: scale(1.03);
+}
+
+.form-control, .form-select {
+    border: 2px solid #e0e0e0;
+    border-radius: 10px;
+    padding: 0.75rem 1rem;
+    transition: all 0.3s ease;
+}
+
+.form-control:focus, .form-select:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 0.25rem rgba(67, 97, 238, 0.15);
+}
+
+.card-header.bg-primary {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+}
+</style>
 {% endblock %}

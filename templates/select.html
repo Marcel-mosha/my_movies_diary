@@ -5,19 +5,21 @@
 {% block content %}
 <div class="container my-5 min-vh-80">
     <div class="row justify-content-center">
-        <div class="col-lg-8">
-            <div class="card shadow-sm border-0 h-100">
+        <div class="col-lg-10">
+            <div class="card shadow-lg border-0 rounded-4 h-100 overflow-hidden">
                 <!-- Card Header -->
-                <div class="card-header bg-white border-bottom-0 py-3">
+                <div class="card-header bg-primary text-white border-bottom-0 py-4">
                     <div class="d-flex justify-content-between align-items-center">
-                        <h2 class="h4 mb-0 fw-bold">
-                            <i class="fas fa-search me-2 text-primary"></i>Select Movie
-                        </h2>
-                        <a href="{% url 'add_movie' %}" class="btn btn-sm btn-outline-primary">
+                        <div>
+                            <h2 class="h4 mb-1 fw-bold">
+                                <i class="fas fa-search me-2"></i>Select Movie
+                            </h2>
+                            <p class="mb-0 small opacity-75">Search results from TMDb</p>
+                        </div>
+                        <a href="{% url 'add_movie' %}" class="btn btn-sm btn-light text-primary">
                             <i class="fas fa-arrow-left me-1"></i>Back to Search
                         </a>
                     </div>
-                    <p class="text-muted mb-0 mt-2">Search results from TMDB</p>
                 </div>
 
                 <!-- Card Body -->
@@ -25,39 +27,45 @@
                     {% if choices %}
                         <div class="list-group list-group-flush">
                             {% for movie in choices %}
-                                <a href="{% url 'find_movie' %}?id={{ movie.id }}" class="list-group-item list-group-item-action py-3 px-4">
-                                    <div class="d-flex align-items-center">
+                                <a href="{% url 'find_movie' %}?id={{ movie.id }}" 
+                                   class="list-group-item list-group-item-action py-4 px-4 border-0 movie-result-item">
+                                    <div class="d-flex align-items-start">
                                         {% if movie.poster_path %}
-                                        <img src="https://image.tmdb.org/t/p/w92/{{ movie.poster_path }}"
-                                             alt="{{ movie.title }} poster"
-                                             class="img-thumbnail me-3"
-                                             style="width: 60px; height: 90px; object-fit: cover;">
+                                        <div class="movie-result-poster me-4">
+                                            <img src="https://image.tmdb.org/t/p/w185/{{ movie.poster_path }}"
+                                                 alt="{{ movie.title }} poster"
+                                                 class="img-fluid rounded-3 shadow-sm"
+                                                 style="width: 80px; height: 120px; object-fit: cover;">
+                                        </div>
                                         {% else %}
-                                        <div class="img-thumbnail me-3 d-flex align-items-center justify-content-center"
-                                             style="width: 60px; height: 90px; background-color: #f8f9fa;">
-                                            <i class="fas fa-film text-muted"></i>
+                                        <div class="movie-result-poster me-4 d-flex align-items-center justify-content-center rounded-3 shadow-sm"
+                                             style="width: 80px; height: 120px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                                            <i class="fas fa-film fa-2x text-white opacity-75"></i>
                                         </div>
                                         {% endif %}
                                         <div class="flex-grow-1">
-                                            <div class="d-flex justify-content-between align-items-start">
-                                                <h5 class="mb-1">{{ movie.title }}</h5>
-                                                <small class="text-muted ms-2">
+                                            <div class="d-flex justify-content-between align-items-start mb-2">
+                                                <h5 class="mb-0 fw-bold text-dark">{{ movie.title }}</h5>
+                                                <span class="badge bg-primary rounded-pill ms-2">
                                                     {% if movie.release_date %}
                                                         {{ movie.release_date|slice:":4" }}
                                                     {% else %}
                                                         N/A
                                                     {% endif %}
-                                                </small>
+                                                </span>
                                             </div>
                                             {% if movie.overview %}
-                                                <p class="mb-1 text-muted small">{{ movie.overview|truncatewords:20 }}</p>
+                                                <p class="mb-2 text-muted small lh-base">{{ movie.overview|truncatewords:25 }}</p>
                                             {% endif %}
-                                            <div class="d-flex align-items-center mt-2">
+                                            <div class="d-flex align-items-center gap-2">
                                                 {% if movie.vote_average %}
-                                                <span class="badge bg-warning text-dark me-2">
+                                                <span class="badge bg-warning text-dark rounded-pill">
                                                     <i class="fas fa-star me-1"></i>{{ movie.vote_average }}
                                                 </span>
                                                 {% endif %}
+                                                <small class="text-muted">
+                                                    <i class="fas fa-arrow-right me-1"></i>Click to add
+                                                </small>
                                             </div>
                                         </div>
                                     </div>
@@ -65,11 +73,13 @@
                             {% endfor %}
                         </div>
                     {% else %}
-                        <div class="text-center py-5 my-3">
-                            <i class="fas fa-search fa-4x text-muted mb-4 opacity-25"></i>
-                            <h4 class="fw-bold">No Movies Found</h4>
+                        <div class="text-center py-5 my-5">
+                            <div class="empty-state-icon mb-4">
+                                <i class="fas fa-search fa-4x text-muted opacity-25"></i>
+                            </div>
+                            <h4 class="fw-bold text-dark mb-3">No Movies Found</h4>
                             <p class="text-muted mb-4">Try a different search term or check your spelling.</p>
-                            <a href="{% url 'add_movie' %}" class="btn btn-primary px-4">
+                            <a href="{% url 'add_movie' %}" class="btn btn-primary btn-lg px-5 rounded-pill">
                                 <i class="fas fa-redo me-2"></i>Try Again
                             </a>
                         </div>
@@ -77,14 +87,52 @@
                 </div>
 
                 <!-- Card Footer -->
-                <div class="card-footer bg-white border-top-0 py-3 text-center">
+                <div class="card-footer bg-light border-top py-3 text-center">
                     <small class="text-muted">
-                        <i class="fas fa-info-circle me-1"></i>
-                        Powered by The Movie Database (TMDB) API
+                        <i class="fas fa-database me-1 text-primary"></i>
+                        Powered by The Movie Database (TMDb) API
                     </small>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+<style>
+.card-header.bg-primary {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+}
+
+.movie-result-item {
+    transition: all 0.3s ease;
+    border-bottom: 1px solid #f0f0f0 !important;
+}
+
+.movie-result-item:hover {
+    background: linear-gradient(to right, #f8f9fa 0%, #ffffff 100%);
+    transform: translateX(8px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+}
+
+.movie-result-item:last-child {
+    border-bottom: none !important;
+}
+
+.movie-result-poster {
+    transition: transform 0.3s ease;
+}
+
+.movie-result-item:hover .movie-result-poster {
+    transform: scale(1.05);
+}
+
+.empty-state-icon {
+    transition: all 0.3s ease;
+}
+
+.empty-state-icon:hover {
+    transform: scale(1.1);
+    opacity: 1;
+}
+</style>
 {% endblock %}
