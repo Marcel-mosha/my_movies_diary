@@ -37,28 +37,32 @@ A modern, full-featured Django web application for tracking, rating, and reviewi
 ## 🛠️ Installation
 
 1. **Clone the repository**
+
    ```bash
    git clone https://github.com/Marcel-mosha/Movie-Diary.git
    cd Movie-Diary
    ```
 
 2. **Create and activate virtual environment**
+
    ```bash
    python -m venv venv
-   
+
    # Windows
    venv\Scripts\activate
-   
+
    # macOS/Linux
    source venv/bin/activate
    ```
 
 3. **Install dependencies**
+
    ```bash
    pip install -r requirements.txt
    ```
 
 4. **Set up PostgreSQL database**
+
    ```sql
    CREATE DATABASE movie_diary;
    CREATE USER movie_user WITH PASSWORD 'your_password';
@@ -66,8 +70,9 @@ A modern, full-featured Django web application for tracking, rating, and reviewi
    ```
 
 5. **Configure environment variables**
-   
+
    Create a `.env` file in the project root:
+
    ```env
    SECRET_KEY=your_django_secret_key
    DEBUG=True
@@ -80,22 +85,25 @@ A modern, full-featured Django web application for tracking, rating, and reviewi
    ```
 
 6. **Run migrations**
+
    ```bash
    python manage.py migrate
    ```
 
 7. **Create superuser (optional)**
+
    ```bash
    python manage.py createsuperuser
    ```
 
 8. **Run the development server**
+
    ```bash
    python manage.py runserver
    ```
 
 9. **Access the application**
-   
+
    Open your browser and navigate to: `http://127.0.0.1:8000/`
 
 ## 📁 Project Structure
@@ -144,6 +152,7 @@ my_movies_diary/
 ### For Administrators
 
 Access the Django admin panel at `/admin/` to:
+
 - Manage users
 - View all movies
 - Assign movies to users
@@ -186,6 +195,7 @@ DATABASES = {
 ## 📊 Database Models
 
 ### Movie Model
+
 - `title`: Movie title
 - `year`: Release year
 - `description`: Plot summary
