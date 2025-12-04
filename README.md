@@ -39,8 +39,8 @@ A modern, full-featured Django web application for tracking, rating, and reviewi
 1. **Clone the repository**
 
    ```bash
-   git clone https://github.com/Marcel-mosha/Movie-Diary.git
-   cd Movie-Diary
+   git clone https://github.com/Marcel-mosha/my_movies_diary.git
+   cd my_movies_diary
    ```
 
 2. **Create and activate virtual environment**
@@ -230,7 +230,7 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 
 Marcel Mosha - [@Marcel-mosha](https://github.com/Marcel-mosha)
 
-Project Link: [https://github.com/Marcel-mosha/Movie-Diary](https://github.com/Marcel-mosha/Movie-Diary)
+Project Link: [https://github.com/Marcel-mosha/my_movies_diary](https://github.com/Marcel-mosha/my_movies_diary)
 
 ---
 
