@@ -7,7 +7,7 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
     environment:
-      - POSTGRES_DB=${DB_NAME:-movie_diary}
+      - POSTGRES_DB=${DB:-movies}
       - POSTGRES_USER=${DB_USER:-movie_user}
       - POSTGRES_PASSWORD=${DB_PASSWORD:-changeme}
     ports:
