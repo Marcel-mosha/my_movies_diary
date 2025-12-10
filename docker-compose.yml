@@ -26,8 +26,8 @@ services:
     restart: unless-stopped
     command: gunicorn --bind 0.0.0.0:8000 --workers 3 --timeout 120 --graceful-timeout 120 my_movies_diary.wsgi:application
     volumes:
-      - static_volume:/app/staticfiles
-      - media_volume:/app/media
+      - static_volume_prod:/app/staticfiles
+      - media_volume_prod:/app/media
     expose:
       - "8000"
     env_file:
@@ -67,7 +67,7 @@ services:
 volumes:
   postgres_data:
     name: my_movies_diary_postgres_data_prod
-  static_volume:
+  static_volume_prod:
     name: my_movies_diary_static_prod
   media_volume_prod:
     name: my_movies_diary_media_prod
