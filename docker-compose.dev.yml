@@ -9,13 +9,13 @@ services:
     volumes:
       - postgres_data_dev:/var/lib/postgresql/data
     environment:
-      - POSTGRES_DB=${DB_NAME:-movie_diary}
-      - POSTGRES_USER=${DB_USER:-movie_user}
+      - POSTGRES_DB=${DB:-movies}
+      - POSTGRES_USER=${DB_USER:-postgres}
       - POSTGRES_PASSWORD=${DB_PASSWORD:-changeme}
     ports:
       - "5432:5432"
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-movie_user}"]
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-postgres}"]
       interval: 10s
       timeout: 5s
       retries: 5
