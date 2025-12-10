@@ -7,6 +7,7 @@ A modern, full-stack movie diary application with a beautiful React frontend and
 ## ✨ Features
 
 ### 🎬 Core Functionality
+
 - **JWT Authentication** - Secure token-based registration, login, and logout
 - **TMDB Integration** - Search and add movies from The Movie Database
 - **Rate & Review** - Personal ratings (0-10) and detailed reviews
@@ -15,6 +16,7 @@ A modern, full-stack movie diary application with a beautiful React frontend and
 - **User-Specific Collections** - Private movie diary for each user
 
 ### 🎨 Modern UI/UX
+
 - **Professional Design** - Gradient themes and smooth animations
 - **Fully Responsive** - Desktop (1400px), Tablet (1024px), Mobile (768px), Small (480px)
 - **Dark Theme** - Emerald green and purple gradients on dark slate background
@@ -24,6 +26,7 @@ A modern, full-stack movie diary application with a beautiful React frontend and
 - **Smooth Transitions** - All interactions feel fluid and professional
 
 ### 🔒 Security
+
 - **JWT Tokens** - Access tokens (5h lifetime), Refresh tokens (7d lifetime)
 - **Protected Routes** - Automatic redirect for unauthorized users
 - **Auto Token Refresh** - Seamless experience with automatic renewal
@@ -32,6 +35,7 @@ A modern, full-stack movie diary application with a beautiful React frontend and
 ## 🏗️ Architecture
 
 ### Project Structure
+
 ```
 my_movies_diary/
 ├── base/                    # Django app
@@ -61,6 +65,7 @@ my_movies_diary/
 ## 🚀 Technology Stack
 
 ### Backend
+
 - **Django 5.2.7** - Python web framework
 - **Django REST Framework 3.15.2** - RESTful API toolkit
 - **Simple JWT 5.4.0** - JWT authentication
@@ -69,12 +74,14 @@ my_movies_diary/
 - **Requests 2.32.5** - TMDB API integration
 
 ### Frontend
+
 - **React 18.3.1** - UI library
 - **React Router DOM 6.28.0** - Client-side routing
 - **Axios 1.7.9** - HTTP client with interceptors
 - **Vite 6.0.3** - Build tool and dev server
 
 ### External APIs
+
 - **TMDB API** - Movie data and poster images
 
 ## 📋 Prerequisites
@@ -83,8 +90,107 @@ my_movies_diary/
 - **Node.js 18+**
 - **PostgreSQL**
 - **TMDB API Key** (free from [themoviedb.org](https://www.themoviedb.org/settings/api))
+- **Docker & Docker Compose** (for containerized deployment)
 
 ## 🛠️ Installation & Setup
+
+### 🐳 Docker Setup (Recommended)
+
+The easiest way to run the project is using Docker. Two configurations are available:
+
+#### Production Mode
+
+1. **Clone and configure**
+
+   ```bash
+   git clone https://github.com/Marcel-mosha/my_movies_diary.git
+   cd my_movies_diary
+   ```
+
+2. **Create environment file**
+
+   ```bash
+   cp .env.example .env
+   # Edit .env with your settings
+   ```
+
+   ```env
+   SECRET_KEY=your_django_secret_key_here
+   DEBUG=False
+   DB_NAME=movie_diary
+   DB_USER=movie_user
+   DB_PASSWORD=secure_password_here
+   TMDB_API_KEY=your_tmdb_api_key_here
+   ```
+
+3. **Build and run**
+
+   ```bash
+   docker-compose up -d --build
+   ```
+
+4. **Create superuser**
+
+   ```bash
+   docker-compose exec backend python manage.py createsuperuser
+   ```
+
+5. **Access the application**
+   - Frontend: `http://localhost`
+   - Backend API: `http://localhost:8000/api/`
+   - Admin: `http://localhost:8000/admin/`
+
+#### Development Mode (with Hot Reload)
+
+1. **Start development containers**
+
+   ```bash
+   docker-compose -f docker-compose.dev.yml up --build
+   ```
+
+2. **Run migrations**
+
+   ```bash
+   docker-compose -f docker-compose.dev.yml exec backend python manage.py migrate
+   ```
+
+3. **Access the application**
+   - Frontend: `http://localhost:5173` (Vite dev server)
+   - Backend: `http://localhost:8000/api/`
+
+**Benefits:**
+
+- ✅ Hot reload for both frontend and backend
+- ✅ No need to install Python or Node.js locally
+- ✅ Consistent environment across all machines
+- ✅ Easy cleanup with `docker-compose down -v`
+
+#### Docker Commands
+
+```bash
+# Start services
+docker-compose up -d
+
+# View logs
+docker-compose logs -f
+
+# Stop services
+docker-compose stop
+
+# Remove containers and volumes
+docker-compose down -v
+
+# Rebuild after code changes
+docker-compose up -d --build
+
+# Access backend shell
+docker-compose exec backend python manage.py shell
+
+# Run migrations
+docker-compose exec backend python manage.py migrate
+```
+
+### 💻 Manual Setup (Without Docker)
 
 ### Backend Setup
 
@@ -187,6 +293,7 @@ my_movies_diary/
 ### Authentication
 
 - `POST /api/register/` - Register new user
+
   ```json
   {
     "username": "string",
@@ -197,15 +304,18 @@ my_movies_diary/
   ```
 
 - `POST /api/login/` - Login user
+
   ```json
   {
     "username": "string",
     "password": "string"
   }
   ```
+
   Returns: `{ "access": "token", "refresh": "token" }`
 
 - `POST /api/token/refresh/` - Refresh access token
+
   ```json
   {
     "refresh": "token"
@@ -360,6 +470,7 @@ class Movie(models.Model):
 ```
 
 **Fields:**
+
 - `title`: Movie title (max 250 chars)
 - `year`: Release year
 - `description`: Plot summary
@@ -390,13 +501,15 @@ The frontend uses response interceptors to automatically refresh JWT tokens on 4
 
 ```javascript
 api.interceptors.response.use(
-  response => response,
-  async error => {
+  (response) => response,
+  async (error) => {
     if (error.response?.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true;
-      const refreshToken = localStorage.getItem('refreshToken');
-      const { data } = await api.post('/token/refresh/', { refresh: refreshToken });
-      localStorage.setItem('accessToken', data.access);
+      const refreshToken = localStorage.getItem("refreshToken");
+      const { data } = await api.post("/token/refresh/", {
+        refresh: refreshToken,
+      });
+      localStorage.setItem("accessToken", data.access);
       return api(originalRequest);
     }
     return Promise.reject(error);
@@ -420,9 +533,64 @@ def save(self, *args, **kwargs):
 
 ## 🐛 Troubleshooting
 
+### Docker Issues
+
+**Containers won't start:**
+
+```bash
+# Check container logs
+docker-compose logs backend
+docker-compose logs frontend
+docker-compose logs db
+
+# Rebuild from scratch
+docker-compose down -v
+docker-compose up --build
+```
+
+**Database connection error in Docker:**
+
+- Ensure `DB_HOST=db` in `.env` (not localhost)
+- Wait for database health check: `docker-compose logs db`
+- Check database is ready: `docker-compose exec db pg_isready -U movie_user`
+
+**Port conflicts:**
+
+```bash
+# Check what's using the ports
+# Windows
+netstat -ano | findstr :80
+netstat -ano | findstr :8000
+
+# Linux/macOS
+lsof -i :80
+lsof -i :8000
+
+# Change ports in docker-compose.yml if needed
+ports:
+  - "8080:80"  # Use 8080 instead of 80
+```
+
+**Frontend can't connect to backend:**
+
+- Check nginx.conf proxy settings
+- Verify backend is healthy: `docker-compose ps`
+- Check backend logs: `docker-compose logs backend`
+
+**Migrations not applied:**
+
+```bash
+# Run migrations manually
+docker-compose exec backend python manage.py migrate
+
+# Create new migrations
+docker-compose exec backend python manage.py makemigrations
+```
+
 ### Backend Issues
 
 **Port 8000 already in use:**
+
 ```bash
 # Windows
 netstat -ano | findstr :8000
@@ -433,11 +601,13 @@ lsof -ti:8000 | xargs kill -9
 ```
 
 **Database connection error:**
+
 - Verify PostgreSQL is running
 - Check `.env` credentials match database setup
 - Ensure database `movie_diary` exists
 
 **TMDB API errors:**
+
 - Verify API key is correct in `.env`
 - Check TMDB API status at [themoviedb.org](https://www.themoviedb.org/)
 - Ensure API key has appropriate permissions
@@ -445,23 +615,27 @@ lsof -ti:8000 | xargs kill -9
 ### Frontend Issues
 
 **Port 5173 already in use:**
+
 ```bash
 # Kill process on port 5173
 npx kill-port 5173
 ```
 
 **API connection errors:**
+
 - Verify Django backend is running on `localhost:8000`
 - Check CORS settings in `settings.py`
 - Clear browser cache and localStorage
 - Check browser console for detailed error messages
 
 **Authentication issues:**
+
 - Clear localStorage: `localStorage.clear()` in browser console
 - Verify tokens are being stored (check Application tab in DevTools)
 - Ensure JWT tokens haven't expired (access token: 5h, refresh: 7d)
 
 **Movie selection redirect to undefined:**
+
 - This was fixed by updating `MovieViewSet.create()` to return full movie data with ID
 - If issue persists, check browser console for detailed logs
 - Verify API response includes `id` field
@@ -469,6 +643,7 @@ npx kill-port 5173
 ### Common Development Issues
 
 **Module not found errors:**
+
 ```bash
 # Backend
 pip install -r requirements.txt
@@ -478,11 +653,13 @@ cd frontend && npm install
 ```
 
 **Database migrations out of sync:**
+
 ```bash
 python manage.py migrate --run-syncdb
 ```
 
 **Static files not loading:**
+
 ```bash
 python manage.py collectstatic --noinput
 ```
@@ -490,24 +667,28 @@ python manage.py collectstatic --noinput
 ## 📸 Screenshots
 
 ### Home Page
+
 - Modern gradient background with animated effects
 - Movie cards displaying posters (450px height), titles, ratings, and reviews
 - Automatic ranking badges with gradient colors
 - Responsive grid layout (3/2/1 columns)
 
 ### Add Movie Page
+
 - TMDB search interface with real-time results
 - Movie posters (400px height) with select buttons
 - Loading states for each movie selection
 - Error handling with user-friendly messages
 
 ### Edit Movie Page
+
 - Large movie poster preview (500px height)
 - Rating input (0-10 scale)
 - Review textarea with validation
 - Save/Cancel actions with immediate feedback
 
 ### Authentication
+
 - Modern login/register forms with gradient buttons
 - Glass-morphism effects
 - Animated input fields
@@ -549,7 +730,7 @@ python manage.py collectstatic --noinput
    ```javascript
    // frontend/src/services/api.js
    const api = axios.create({
-     baseURL: 'https://your-backend-domain.com/api',
+     baseURL: "https://your-backend-domain.com/api",
    });
    ```
 
@@ -561,6 +742,66 @@ python manage.py collectstatic --noinput
    ```
 
 3. **Deploy** the `dist` folder to hosting platform
+
+### Docker Production Deployment
+
+The easiest production deployment uses Docker Compose:
+
+1. **Deploy on your server**
+
+   ```bash
+   git clone https://github.com/Marcel-mosha/my_movies_diary.git
+   cd my_movies_diary
+   ```
+
+2. **Configure production environment**
+
+   ```bash
+   cp .env.example .env
+   ```
+
+   Edit `.env`:
+
+   ```env
+   SECRET_KEY=your-production-secret-key
+   DEBUG=False
+   DB_NAME=movie_diary
+   DB_USER=movie_user
+   DB_PASSWORD=secure-production-password
+   TMDB_API_KEY=your-tmdb-api-key
+   ```
+
+3. **Update CORS and ALLOWED_HOSTS** in `settings.py`
+
+   ```python
+   ALLOWED_HOSTS = ['yourdomain.com', 'www.yourdomain.com']
+   CORS_ALLOWED_ORIGINS = ['https://yourdomain.com']
+   ```
+
+4. **Build and start containers**
+
+   ```bash
+   docker-compose up -d --build
+   ```
+
+5. **Create superuser**
+
+   ```bash
+   docker-compose exec backend python manage.py createsuperuser
+   ```
+
+6. **Access application**
+   - Frontend: `http://your-server-ip`
+   - Backend API: `http://your-server-ip:8000/api/`
+
+**Environment Variables Checklist:**
+
+- ✅ `SECRET_KEY` - Strong, unique Django secret
+- ✅ `DEBUG=False` - Never True in production
+- ✅ `DB_*` - Production database credentials
+- ✅ `TMDB_API_KEY` - Your TMDB API key
+- ✅ `ALLOWED_HOSTS` - Your domain names
+- ✅ `CORS_ALLOWED_ORIGINS` - Frontend URLs
 
 ## 🤝 Contributing
 
@@ -603,6 +844,7 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 ### Report Issues
 
 Found a bug or have a feature request? Please open an issue on GitHub with:
+
 - Detailed description
 - Steps to reproduce (for bugs)
 - Expected vs actual behavior
@@ -611,6 +853,7 @@ Found a bug or have a feature request? Please open an issue on GitHub with:
 ### Questions?
 
 For questions or discussions:
+
 - Open a GitHub Discussion
 - Check existing issues for solutions
 - Review the troubleshooting section above
