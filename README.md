@@ -27,16 +27,11 @@ A modern, full-stack movie diary application with a beautiful React frontend and
 
 ### 🔒 Security
 
-- **JWT Tokens** - Access tokens (5h lifetime), Refresh tokens (7d lifetime)
+- **JWT Authentication** - Secure token-based authentication
 - **Protected Routes** - Automatic redirect for unauthorized users
-- **Auto Token Refresh** - Seamless experience with automatic renewal
 - **CORS Configured** - Secure cross-origin resource sharing
-- **HTTPS/SSL** - Full SSL/TLS encryption with Let's Encrypt
-- **Security Headers** - HSTS, CSP, X-Frame-Options, and more
-- **Modern TLS** - TLS 1.2 and 1.3 with secure cipher suites
-- **Auto Certificate Renewal** - Automated SSL certificate management
-
-> 📖 For production SSL/TLS setup, see [SSL_SETUP.md](SSL_SETUP.md)
+- **Rate Limiting** - Nginx rate limiting for API endpoints
+- **Basic Security Headers** - XSS protection, clickjacking prevention
 
 ## 🏗️ Architecture
 
@@ -776,18 +771,18 @@ The easiest production deployment uses Docker Compose with automatic SSL/TLS:
    DJANGO_KEY=your-production-secret-key  # Generate with: python -c 'from django.core.management.utils import get_random_secret_key; print(get_random_secret_key())'
    DEBUG=False
    ALLOWED_HOSTS=yourdomain.com,www.yourdomain.com
-   
+
    # Database
    DB=movies
    DB_USER=postgres
    DB_PASSWORD=secure-production-password
    DB_HOST=db
    DB_PORT=5432
-   
+
    # TMDB API
    API_KEY=your-tmdb-api-key
    MOVIE_ENDPOINT=https://api.themoviedb.org/3/search/movie
-   
+
    # CORS & CSRF (HTTPS URLs for production!)
    CORS_ALLOWED_ORIGINS=https://yourdomain.com,https://www.yourdomain.com
    CSRF_TRUSTED_ORIGINS=https://yourdomain.com,https://www.yourdomain.com
@@ -822,6 +817,7 @@ The easiest production deployment uses Docker Compose with automatic SSL/TLS:
    ```
 
    This script will:
+
    - Build Docker images
    - Setup SSL certificates with Let's Encrypt
    - Start all services
@@ -874,10 +870,12 @@ docker-compose logs backend
 ```
 
 **Test SSL Quality:**
+
 - SSL Labs Test: https://www.ssllabs.com/ssltest/analyze.html?d=yourdomain.com
 - Security Headers: https://securityheaders.com/?q=yourdomain.com
 
 **Expected Results:**
+
 - ✅ SSL Labs Grade: A or A+
 - ✅ Security Headers: A or A+
 - ✅ All HTTP traffic redirects to HTTPS

@@ -28,8 +28,4 @@ Thumbs.db
 staticfiles/
 media/
 
-# SSL Certificates and Let's Encrypt
-certbot/
-*.pem
-*.crt
-*.key
+
