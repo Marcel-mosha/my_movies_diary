@@ -31,6 +31,12 @@ A modern, full-stack movie diary application with a beautiful React frontend and
 - **Protected Routes** - Automatic redirect for unauthorized users
 - **Auto Token Refresh** - Seamless experience with automatic renewal
 - **CORS Configured** - Secure cross-origin resource sharing
+- **HTTPS/SSL** - Full SSL/TLS encryption with Let's Encrypt
+- **Security Headers** - HSTS, CSP, X-Frame-Options, and more
+- **Modern TLS** - TLS 1.2 and 1.3 with secure cipher suites
+- **Auto Certificate Renewal** - Automated SSL certificate management
+
+> 📖 For production SSL/TLS setup, see [SSL_SETUP.md](SSL_SETUP.md)
 
 ## 🏗️ Architecture
 
@@ -743,52 +749,157 @@ python manage.py collectstatic --noinput
 
 3. **Deploy** the `dist` folder to hosting platform
 
-### Docker Production Deployment
+### Docker Production Deployment with SSL/TLS
 
-The easiest production deployment uses Docker Compose:
+The easiest production deployment uses Docker Compose with automatic SSL/TLS:
 
-1. **Deploy on your server**
+#### Quick Start
+
+1. **Clone and navigate to project**
 
    ```bash
    git clone https://github.com/Marcel-mosha/my_movies_diary.git
    cd my_movies_diary
    ```
 
-2. **Configure production environment**
+2. **Configure environment variables**
 
    ```bash
    cp .env.example .env
+   nano .env  # or use your preferred editor
    ```
 
-   Edit `.env`:
+   Required `.env` settings:
 
    ```env
-   SECRET_KEY=your-production-secret-key
+   # Django
+   DJANGO_KEY=your-production-secret-key  # Generate with: python -c 'from django.core.management.utils import get_random_secret_key; print(get_random_secret_key())'
    DEBUG=False
-   DB_NAME=movie_diary
-   DB_USER=movie_user
+   ALLOWED_HOSTS=yourdomain.com,www.yourdomain.com
+   
+   # Database
+   DB=movies
+   DB_USER=postgres
    DB_PASSWORD=secure-production-password
-   TMDB_API_KEY=your-tmdb-api-key
+   DB_HOST=db
+   DB_PORT=5432
+   
+   # TMDB API
+   API_KEY=your-tmdb-api-key
+   MOVIE_ENDPOINT=https://api.themoviedb.org/3/search/movie
+   
+   # CORS & CSRF (HTTPS URLs for production!)
+   CORS_ALLOWED_ORIGINS=https://yourdomain.com,https://www.yourdomain.com
+   CSRF_TRUSTED_ORIGINS=https://yourdomain.com,https://www.yourdomain.com
    ```
 
-3. **Update CORS and ALLOWED_HOSTS** in `settings.py`
+3. **Configure SSL certificate script**
 
-   ```python
-   ALLOWED_HOSTS = ['yourdomain.com', 'www.yourdomain.com']
-   CORS_ALLOWED_ORIGINS = ['https://yourdomain.com']
-   ```
-
-4. **Build and start containers**
+   Edit `init-letsencrypt.sh`:
 
    ```bash
-   docker-compose up -d --build
+   nano init-letsencrypt.sh
    ```
 
-5. **Create superuser**
+   Update these variables:
 
    ```bash
-   docker-compose exec backend python manage.py createsuperuser
+   DOMAIN="yourdomain.com"
+   WWW_DOMAIN="www.yourdomain.com"
+   EMAIL="your-email@example.com"
    ```
+
+4. **Make scripts executable**
+
+   ```bash
+   chmod +x init-letsencrypt.sh deploy-production.sh
+   ```
+
+5. **Run automated deployment**
+
+   ```bash
+   ./deploy-production.sh
+   ```
+
+   This script will:
+   - Build Docker images
+   - Setup SSL certificates with Let's Encrypt
+   - Start all services
+   - Run database migrations
+   - Collect static files
+
+#### Manual SSL Setup
+
+If you prefer manual control:
+
+```bash
+# Build images
+docker-compose build
+
+# Initialize SSL certificates
+./init-letsencrypt.sh
+
+# Start services
+docker-compose up -d
+
+# Run migrations
+docker-compose exec backend python manage.py migrate
+
+# Collect static files
+docker-compose exec backend python manage.py collectstatic --noinput
+
+# Create superuser
+docker-compose exec backend python manage.py createsuperuser
+```
+
+#### Verify SSL Setup
+
+After deployment, verify your SSL configuration:
+
+```bash
+# Check certificate information
+docker-compose run --rm certbot certificates
+
+# Test HTTPS access
+curl -I https://yourdomain.com
+
+# Test HTTP redirect
+curl -I http://yourdomain.com  # Should redirect to HTTPS
+
+# View nginx logs
+docker-compose logs nginx
+
+# View backend logs
+docker-compose logs backend
+```
+
+**Test SSL Quality:**
+- SSL Labs Test: https://www.ssllabs.com/ssltest/analyze.html?d=yourdomain.com
+- Security Headers: https://securityheaders.com/?q=yourdomain.com
+
+**Expected Results:**
+- ✅ SSL Labs Grade: A or A+
+- ✅ Security Headers: A or A+
+- ✅ All HTTP traffic redirects to HTTPS
+- ✅ HSTS header present
+- ✅ Secure cookie flags enabled
+
+#### SSL Certificate Management
+
+Certificates automatically renew every 12 hours. To manually renew:
+
+```bash
+# Force certificate renewal
+docker-compose run --rm certbot renew
+
+# Reload nginx
+docker-compose exec nginx nginx -s reload
+
+# Check renewal logs
+docker-compose logs certbot
+```
+
+📖 **Detailed SSL/TLS documentation:** See [SSL_SETUP.md](SSL_SETUP.md)
 
 6. **Access application**
    - Frontend: `http://your-server-ip`

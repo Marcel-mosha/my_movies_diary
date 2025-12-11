@@ -24,6 +24,12 @@ Thumbs.db
 # Environment variables
 .env
 
-# Static & media files (optional, if they’re generated)
+# Static & media files (optional, if they're generated)
 staticfiles/
 media/
+
+# SSL Certificates and Let's Encrypt
+certbot/
+*.pem
+*.crt
+*.key
