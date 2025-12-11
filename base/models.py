@@ -5,7 +5,7 @@ class Movie(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='movies')
     title = models.CharField(max_length=250)
     year = models.IntegerField()
-    description = models.TextField(max_length=500)
+    description = models.TextField(max_length=1000)
     rating = models.FloatField(null=True, blank=True)
     ranking = models.IntegerField(null=True, blank=True)
     review = models.TextField(max_length=250, null=True, blank=True)
