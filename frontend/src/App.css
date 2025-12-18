@@ -421,7 +421,11 @@ button:active:not(:disabled) {
 }
 
 .btn-toggle-filters {
-  background: linear-gradient(135deg, var(--primary-color), var(--primary-hover));
+  background: linear-gradient(
+    135deg,
+    var(--primary-color),
+    var(--primary-hover)
+  );
   color: white;
   border: none;
   padding: 0.875rem 2rem;

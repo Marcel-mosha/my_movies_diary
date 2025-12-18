@@ -156,99 +156,99 @@ const Home = () => {
 
           {showFilters && (
             <div className="filters-section">
-            <div className="filters-header">
-              <h3>🔍 Search & Filter</h3>
-              <button onClick={clearFilters} className="btn-clear-filters">
-                Clear All
-              </button>
-            </div>
-
-            <div className="filters-grid">
-              {/* Search */}
-              <div className="filter-group full-width">
-                <label>Search by Title</label>
-                <input
-                  type="text"
-                  placeholder="Search movies..."
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  className="filter-input"
-                />
+              <div className="filters-header">
+                <h3>🔍 Search & Filter</h3>
+                <button onClick={clearFilters} className="btn-clear-filters">
+                  Clear All
+                </button>
               </div>
 
-              {/* Rating Filter */}
-              <div className="filter-group">
-                <label>Min Rating</label>
-                <input
-                  type="number"
-                  min="0"
-                  max="10"
-                  step="0.1"
-                  placeholder="0"
-                  value={minRating}
-                  onChange={(e) => setMinRating(e.target.value)}
-                  className="filter-input"
-                />
+              <div className="filters-grid">
+                {/* Search */}
+                <div className="filter-group full-width">
+                  <label>Search by Title</label>
+                  <input
+                    type="text"
+                    placeholder="Search movies..."
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    className="filter-input"
+                  />
+                </div>
+
+                {/* Rating Filter */}
+                <div className="filter-group">
+                  <label>Min Rating</label>
+                  <input
+                    type="number"
+                    min="0"
+                    max="10"
+                    step="0.1"
+                    placeholder="0"
+                    value={minRating}
+                    onChange={(e) => setMinRating(e.target.value)}
+                    className="filter-input"
+                  />
+                </div>
+
+                <div className="filter-group">
+                  <label>Max Rating</label>
+                  <input
+                    type="number"
+                    min="0"
+                    max="10"
+                    step="0.1"
+                    placeholder="10"
+                    value={maxRating}
+                    onChange={(e) => setMaxRating(e.target.value)}
+                    className="filter-input"
+                  />
+                </div>
+
+                {/* Year Filter */}
+                <div className="filter-group">
+                  <label>From Year</label>
+                  <input
+                    type="number"
+                    placeholder="e.g., 2000"
+                    value={minYear}
+                    onChange={(e) => setMinYear(e.target.value)}
+                    className="filter-input"
+                  />
+                </div>
+
+                <div className="filter-group">
+                  <label>To Year</label>
+                  <input
+                    type="number"
+                    placeholder="e.g., 2024"
+                    value={maxYear}
+                    onChange={(e) => setMaxYear(e.target.value)}
+                    className="filter-input"
+                  />
+                </div>
+
+                {/* Sort */}
+                <div className="filter-group">
+                  <label>Sort By</label>
+                  <select
+                    value={sortBy}
+                    onChange={(e) => setSortBy(e.target.value)}
+                    className="filter-select"
+                  >
+                    <option value="rating">Rating (High to Low)</option>
+                    <option value="rating-asc">Rating (Low to High)</option>
+                    <option value="year">Year (Newest First)</option>
+                    <option value="year-asc">Year (Oldest First)</option>
+                    <option value="title">Title (A-Z)</option>
+                    <option value="title-desc">Title (Z-A)</option>
+                  </select>
+                </div>
               </div>
 
-              <div className="filter-group">
-                <label>Max Rating</label>
-                <input
-                  type="number"
-                  min="0"
-                  max="10"
-                  step="0.1"
-                  placeholder="10"
-                  value={maxRating}
-                  onChange={(e) => setMaxRating(e.target.value)}
-                  className="filter-input"
-                />
+              <div className="results-count">
+                Showing {filteredMovies.length} of {movies.length} movies
               </div>
-
-              {/* Year Filter */}
-              <div className="filter-group">
-                <label>From Year</label>
-                <input
-                  type="number"
-                  placeholder="e.g., 2000"
-                  value={minYear}
-                  onChange={(e) => setMinYear(e.target.value)}
-                  className="filter-input"
-                />
-              </div>
-
-              <div className="filter-group">
-                <label>To Year</label>
-                <input
-                  type="number"
-                  placeholder="e.g., 2024"
-                  value={maxYear}
-                  onChange={(e) => setMaxYear(e.target.value)}
-                  className="filter-input"
-                />
-              </div>
-
-              {/* Sort */}
-              <div className="filter-group">
-                <label>Sort By</label>
-                <select
-                  value={sortBy}
-                  onChange={(e) => setSortBy(e.target.value)}
-                  className="filter-select"
-                >
-                  <option value="rating">Rating (High to Low)</option>
-                  <option value="rating-asc">Rating (Low to High)</option>
-                  <option value="year">Year (Newest First)</option>
-                  <option value="year-asc">Year (Oldest First)</option>
-                  <option value="title">Title (A-Z)</option>
-                  <option value="title-desc">Title (Z-A)</option>
-                </select>
-              </div>
-            </div>
-
-            <div className="results-count">
-              Showing {filteredMovies.length} of {movies.length} movies
-            </div>
             </div>
           )}
 
