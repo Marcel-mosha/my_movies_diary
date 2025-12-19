@@ -13,8 +13,8 @@ const Navbar = () => {
         <div className="nav-menu">
           {isAuthenticated ? (
             <>
-              <Link to="/" className="nav-link">
-                Home
+              <Link to="/movies" className="nav-link">
+                My Movies
               </Link>
               <Link to="/add" className="nav-link">
                 Add Movie
